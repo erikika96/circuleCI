@@ -9,4 +9,6 @@
             name: "prueba"
             command: |
                 echo "A first hello"
+                ls
+                echo "mensaje 2"
                 

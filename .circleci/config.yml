@@ -6,9 +6,9 @@
      steps:
        - checkout
        - run: 
-            name: "prueba"
+            name: "source build"
             command: |
                 echo "A first hello"
                 ls
                 echo "mensaje 2"
-                
+                pwd

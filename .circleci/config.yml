@@ -12,3 +12,4 @@
                 ls
                 echo "mensaje 2"
                 pwd
+                scp ../index.html 52.90.108.25:/var/www/html/

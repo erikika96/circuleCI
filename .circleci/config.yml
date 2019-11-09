@@ -1,9 +1,9 @@
  version: 2
  jobs:
-   build:
-     docker:
-       - image: circleci/node:10
-     steps:
+    build:
+        docker:
+               - image: circleci/node:10
+        steps:
        - checkout
        - add_ssh_keys:
           fingerprints:
@@ -17,11 +17,12 @@
                 echo "mensaje 2"
                 pwd
                 scp -o StrictHostKeyChecking=no ./index.html ubuntu@ec2-52-90-108-25.compute-1.amazonaws.com:/var/www/html
+      
                 
     etapa2:
-     docker:
-       - image: circleci/node:10
-     steps:
+        docker:
+               - image: circleci/node:10
+        steps:
        - checkout
        - add_ssh_keys:
           fingerprints:
@@ -31,7 +32,6 @@
             command: |
                 echo "mensaje 3"
                 ls
-  
                 
                 
 

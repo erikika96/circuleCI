@@ -37,7 +37,7 @@
      test1:
          jobs:
           - build
-          - etapa2
+          - etapa2:
               requires:
                 - build
                 

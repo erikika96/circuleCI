@@ -38,8 +38,8 @@
          jobs:
           - build
           - etapa2
-              #requires:
-                #- build
+              requires:
+                - build
                 
 
         

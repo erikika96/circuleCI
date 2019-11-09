@@ -32,7 +32,14 @@
                 command: |
                     echo "mensaje 3"
                     ls
-                
+ workflows:
+     version: 2
+     test1:
+         jobs:
+          - build:
+          - etapa2:
+              #requires:
+                #- build
                 
 
         

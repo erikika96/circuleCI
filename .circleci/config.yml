@@ -40,7 +40,7 @@
                - image: circleci/node:8.10
         working_directory: ~/repo
 
-           steps:
+        steps:
              - checkout
 
              # Download and cache dependencies

@@ -11,7 +11,7 @@
                     # fallback to using the latest cache if no exact match is found
                  - v1-dependencies-
 
-           - run: yarn install
+           - run: npm install
 
            - save_cache:
                paths:
@@ -31,7 +31,7 @@
                 - v1-dependencies-{{ checksum "package.json" }}
                 # fallback to using the latest cache if no exact match is found
                 - v1-dependencies-
-          - run: yarn run test
+          - run: npm run test
                     
                     
                     
@@ -51,7 +51,7 @@
              - add_ssh_keys:
                  fingerprints:
                    - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-             - run: yarn run build
+             - run: npm run build
              - run : ssh -o StrictHostKeyChecking=no ubuntu@54.82.64.39 'sudo rm -r /var/www/html/*'
              - run : ssh -o StrictHostKeyChecking=no ubuntu@54.82.64.39 'sudo chmod 777 /var/www/html'
              - run : scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@54.82.64.39:/var/www/html
@@ -76,7 +76,7 @@
           - add_ssh_keys:
               fingerprints:
                    - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-          - run: yarn run build
+          - run: npm run build
           - run : ssh -o StrictHostKeyChecking=no ubuntu@3.223.140.45 'sudo rm -r /var/www/html/*'
           - run : ssh -o StrictHostKeyChecking=no ubuntu@3.223.140.45 'sudo chmod 777 /var/www/html'
           - run : scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@3.223.140.45:/var/www/html          
@@ -101,7 +101,7 @@
           - add_ssh_keys:
               fingerprints:
                    - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-          - run: yarn run build
+          - run: npm run build
           - run : ssh -o StrictHostKeyChecking=no ubuntu@3.95.152.120 'sudo rm -r /var/www/html/*'
           - run : ssh -o StrictHostKeyChecking=no ubuntu@3.95.152.120 'sudo chmod 777 /var/www/html'
           - run : scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@3.95.152.120:/var/www/html          

@@ -121,13 +121,13 @@
              branches:
                only:
                  - develop
-       - test:
-           requires:
-             - build
-           filters:
-             branches:
-               only:
-                 - develop
+     #  - test:
+       #    requires:
+         #    - build
+         #  filters:
+         #    branches:
+         #      only:
+         #        - develop
        - HTMLservidor-des:
            requires:
              - build

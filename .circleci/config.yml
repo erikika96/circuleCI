@@ -19,7 +19,7 @@
                key: v1-dependencies-{{ checksum "package.json" }}
           
                 
-    pruebaHTML:
+    test:
         docker:
                - image: circleci/node:8.10
         working_directory: ~/repo
@@ -121,7 +121,7 @@
              branches:
                only:
                  - develop
-       - pruebaHTML:
+       - test:
            requires:
              - build
            filters:
@@ -131,7 +131,7 @@
        - HTMLservidor-des:
            requires:
              - build
-             - pruebaHTML
+             - test
            filters:
              branches:
                only:
@@ -140,7 +140,7 @@
            type: approval
            requires:
              - HTMLservidor-des
-             - pruebaHTML
+             - test
        - HTMLproduccion-ser1:
            requires:
              - aprovacion

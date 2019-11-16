@@ -5,101 +5,155 @@
                - image: circleci/node:10
         steps:
            - checkout
-           - add_ssh_keys:
-              fingerprints:
-                - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-           - run: 
-                name: "source build"
-                command: |
-                    echo "A first hello"
-                    touch miarchivo
-                    ls
-                    echo "mensaje 2"
+           - restore_cache:
+               keys:
+                 - v1-dependencies-{{ checksum "package.json" }}
+                    # fallback to using the latest cache if no exact match is found
+                 - v1-dependencies-
 
-           - persist_to_workspace:
-              # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
-              # taken to be the root directory of the workspace.
-              root: /home/circleci
-              # Must be relative path from root
-              paths:
-                - ./project
+           - run: yarn install
+
+           - save_cache:
+               paths:
+                 - node_modules
+               key: v1-dependencies-{{ checksum "package.json" }}
           
                 
     pruebaHTML:
         docker:
                - image: circleci/node:10
+        working_directory: ~/repo
+
         steps:
-           - attach_workspace:
-              # Must be absolute path or relative path from working_directory
-              at: /home/circleci
-
-
-           - checkout
-           - add_ssh_keys:
-              fingerprints:
-                - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-           - run: 
-                name: "prueba docker"
-                command: |
-                    echo "esto testea el codigo html"
-                    ls
-                    pwd
-                    #scp -o StrictHostKeyChecking=no ./index.html ubuntu@54.147.168.65:/var/www/html
+          - checkout
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                # fallback to using the latest cache if no exact match is found
+                - v1-dependencies-
+          - run: yarn run test
                     
                     
                     
     HTMLservidor-des:
         docker:
                - image: circleci/node:10
-        steps:
-           - attach_workspace:
-              # Must be absolute path or relative path from working_directory
-              at: /home/circleci
+        working_directory: ~/repo
+
+           steps:
+             - checkout
+
+             # Download and cache dependencies
+             - restore_cache:
+                 keys:
+                   - v1-dependencies-{{ checksum "package.json" }}
+                   - v1-dependencies-
+             - add_ssh_keys:
+                 fingerprints:
+                   - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
+             - run: yarn run build
+             - run : ssh -o StrictHostKeyChecking=no ubuntu@54.82.64.39 'sudo rm -r /var/www/html/*'
+             - run : ssh -o StrictHostKeyChecking=no ubuntu@54.82.64.39 'sudo chmod 777 /var/www/html'
+             - run : scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@54.82.64.39:/var/www/html
+             - save_cache:
+                 paths:
+                   - node_modules
+                 key: v1-dependencies-{{ checksum "package.json" }} 
 
 
-           - checkout
-           - add_ssh_keys:
-              fingerprints:
-                - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-           - run: 
-                name: "prueba docker"
-                command: |
-                    echo "esto sube al servidor de desarrollo"
-                    ls
-                    pwd
-                    #scp -o StrictHostKeyChecking=no ./index.html ubuntu@54.147.168.65:/var/www/html    
-
-
-    HTMLproduccion:
+    HTMLproduccion-ser1:
         docker:
                - image: circleci/node:10
+        working_directory: ~/repo
+
         steps:
-           - attach_workspace:
-              # Must be absolute path or relative path from working_directory
-              at: /home/circleci
-
-
-           - checkout
-           - add_ssh_keys:
+          - checkout
+          # Download and cache dependencies
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+          - add_ssh_keys:
               fingerprints:
-                - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
-           - run: 
-                name: "prueba docker"
-                command: |
-                    echo "esto sube el codigo a los servidores de produccion despues de confirmacion"
-                    ls
-                    pwd
-                    #scp -o StrictHostKeyChecking=no ./index.html ubuntu@54.147.168.65:/var/www/html                     
+                   - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
+          - run: yarn run build
+          - run : ssh -o StrictHostKeyChecking=no ubuntu@3.223.140.45 'sudo rm -r /var/www/html/*'
+          - run : ssh -o StrictHostKeyChecking=no ubuntu@3.223.140.45 'sudo chmod 777 /var/www/html'
+          - run : scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@3.223.140.45:/var/www/html          
+
+          - save_cache:
+              paths:
+                - node_modules
+              key: v1-dependencies-{{ checksum "package.json" }}  
+
+    HTMLproduccion-ser2:
+        docker:
+               - image: circleci/node:10
+        working_directory: ~/repo
+
+        steps:
+          - checkout
+          # Download and cache dependencies
+          - restore_cache:
+              keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+          - add_ssh_keys:
+              fingerprints:
+                   - "S95:40:36:d5:16:09:57:fe:bf:cc:01:3f:18:d5:5c:a8"
+          - run: yarn run build
+          - run : ssh -o StrictHostKeyChecking=no ubuntu@3.95.152.120 'sudo rm -r /var/www/html/*'
+          - run : ssh -o StrictHostKeyChecking=no ubuntu@3.95.152.120 'sudo chmod 777 /var/www/html'
+          - run : scp -o StrictHostKeyChecking=no -r ./build/* ubuntu@3.95.152.120:/var/www/html          
+
+          - save_cache:
+              paths:
+                - node_modules
+              key: v1-dependencies-{{ checksum "package.json" }}                     
                     
                     
- workflows:
-     version: 2
-     test1:
-         jobs:
-          - build
-          - pruebaHTML:
-              requires:
-                - build
-                
+workflows:
+  version: 2
+  normal_run:
+    jobs:
+      - build: 
+          filters:
+            branches:
+              only:
+                - develop
+      - pruebaHTML:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+      - HTMLservidor-des:
+          requires:
+            - build
+            - pruebaHTML
+          filters:
+            branches:
+              only:
+                - develop
+      - aprovacion:
+          type: approval
+          requires:
+            - HTMLservidor-des
+            - pruebaHTML
+      - HTMLproduccion-ser1:
+          requires:
+            - aprovacion
+          filters:
+            branches:
+              only:
+                - develop    
+      - HTMLproduccion-ser2:
+          requires:
+            - aprovacion
+          filters:
+            branches:
+              only:
+                - develop                       
 
         

@@ -131,7 +131,7 @@
        - HTMLservidor-des:
            requires:
              - build
-             - test
+      #       - test
            filters:
              branches:
                only:
@@ -140,7 +140,7 @@
            type: approval
            requires:
              - HTMLservidor-des
-             - test
+       #      - test
        - HTMLproduccion-ser1:
            requires:
              - aprovacion

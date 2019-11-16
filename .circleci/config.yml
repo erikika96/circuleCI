@@ -112,48 +112,48 @@
               key: v1-dependencies-{{ checksum "package.json" }}                     
                     
                     
-workflows:
-  version: 2
-  normal_run:
-    jobs:
-      - build: 
-          filters:
-            branches:
-              only:
-                - develop
-      - pruebaHTML:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - develop
-      - HTMLservidor-des:
-          requires:
-            - build
-            - pruebaHTML
-          filters:
-            branches:
-              only:
-                - develop
-      - aprovacion:
-          type: approval
-          requires:
-            - HTMLservidor-des
-            - pruebaHTML
-      - HTMLproduccion-ser1:
-          requires:
-            - aprovacion
-          filters:
-            branches:
-              only:
-                - develop    
-      - HTMLproduccion-ser2:
-          requires:
-            - aprovacion
-          filters:
-            branches:
-              only:
-                - develop                       
+    workflows:
+      version: 2
+      normal_run:
+        jobs:
+          - build: 
+              filters:
+                branches:
+                  only:
+                    - develop
+          - pruebaHTML:
+              requires:
+                - build
+              filters:
+                branches:
+                  only:
+                    - develop
+          - HTMLservidor-des:
+              requires:
+                - build
+                - pruebaHTML
+              filters:
+                branches:
+                  only:
+                    - develop
+          - aprovacion:
+              type: approval
+              requires:
+                - HTMLservidor-des
+                - pruebaHTML
+          - HTMLproduccion-ser1:
+              requires:
+                - aprovacion
+              filters:
+                branches:
+                  only:
+                    - develop    
+          - HTMLproduccion-ser2:
+              requires:
+                - aprovacion
+              filters:
+                branches:
+                  only:
+                    - develop                       
 
         
